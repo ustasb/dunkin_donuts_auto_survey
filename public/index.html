@@ -7,7 +7,6 @@
   <link href='http://fonts.googleapis.com/css?family=Maven+Pro' rel='stylesheet' type='text/css'>
   <script src="vendor/jquery-1.11.0.min.js"></script>
   <style>
-
     body {
       text-align: center;
       font-family: 'Maven Pro', sans-serif;
@@ -18,11 +17,11 @@
     }
 
     a {
-      color: #FC772A;
+      color: #FC772A; /* Dunkin' Donuts orange */
     }
 
     b {
-      color: #D81860;
+      color: #D81860; /* Dunkin' Donuts pink */
     }
 
     .pure-button-primary {
@@ -42,7 +41,7 @@
       width: 60px;
     }
 
-    #submit-status, #validation-code {
+    #submit-status {
       display: none;
       margin-top: 15px;
     }
@@ -58,13 +57,13 @@
     <h1>Dunkin' Donuts Auto-Survey</h1>
 
     <span>
-      Automatically completes a Dunkin' Dunuts
+      Automatically completes a Dunkin' Donuts
       <a href="https://www.telldunkin.com/">survey</a>
       to earn you
       <b>a free donut!</b>
     </span>
 
-    <br> <br>
+    <br><br>
 
     <form id="foo" class="pure-form" action="javascript:void(0);">
       <fieldset>
@@ -85,8 +84,7 @@
       </fieldset>
     </form>
 
-    <div id="submit-status" class="error">Percent Complete: 0%</div>
-    <div id="validation-code">Validation Code: 53953</div>
+    <div id="submit-status">Percent Complete: 0%</div>
   </div>
 
   <script>
@@ -95,7 +93,7 @@
         $button = $('button'),
         $inputs = $('input'),
         $status = $('#submit-status'),
-        $valCode = $('#validation-code');
+        eventSource = null;
 
     function validateSurveyCode(surveyCode) {
       return /^\w{5}-\w{5}-\w{4}-\w{4}$/.test(surveyCode);
@@ -132,14 +130,12 @@
     function onSubmit() {
       var surveyCode = getSurveyCode();
 
-      if (validateSurveyCode(surveyCode)) {
+      if (true || validateSurveyCode(surveyCode)) {
         disableInput();
 
-        getValidationCode(surveyCode);
-
-        setTimeout(function () {
+        getValidationCode('57601-39117-0903-1449', function () {
           enableInput();
-        }, 3000);
+        });
       } else {
         showStatus('Invalid Survey Code!');
         hideStatus(3500);
@@ -165,10 +161,27 @@
       $contentWrapper.css('margin-top', marginTop);
     }
 
-    function getValidationCode(surveyCode, onResponse) {
-      var es = new EventSource('/validationcode/' + surveyCode);
+    function getValidationCode(surveyCode, onDone) {
+      eventSource && eventSource.close();
+      eventSource = new EventSource('/validationcode/' + surveyCode);
 
-      es.onmessage = function (e) { console.log(e.data); };
+      eventSource.onmessage = function (e) {
+        var status = e.data;
+        showStatus(status);
+
+        if (/Done!/.test(status)) {
+          eventSource.close();
+          eventSource = null;
+          onDone();
+        }
+      };
+
+      eventSource.onerror = function (e) {
+        showStatus("An error occured! Try again some other time...");
+        eventSource.close();
+        eventSource = null;
+        onDone();
+      };
     }
 
     function init() {
