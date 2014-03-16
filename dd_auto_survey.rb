@@ -7,11 +7,20 @@ end
 module DunkinDonuts
   TELL_DUNKIN_URL = 'https://www.telldunkin.com'
 
+  FUNNY_MESSAGES = [
+    "Ugh, I hate filling out surveys...",
+    "Help me...",
+    "I miss being outside...",
+    "whatever, whatever, whatever... this blows",
+    "This is depressing...",
+  ]
+
   class AutoSurvey
 
     def initialize(survey_code, &progress_cb)
       @survey_code = survey_code.split('-')
-      @progress_cb = progress_cb
+      @progress_cb = progress_cb || -> (status) {}
+      @funny_messages = FUNNY_MESSAGES.dup.shuffle
     end
 
     def get_validation_code
@@ -25,8 +34,11 @@ module DunkinDonuts
 
     private
 
-    def update_progress_status(status)
-      @progress_cb.call(status) if @progress_cb
+    def update_progress_status(status, random_message = false)
+      if random_message && @funny_messages.any? && (rand() * 3).round == 3
+        status = @funny_messages.shift
+      end
+      @progress_cb.call(status)
     end
 
     def session
@@ -58,8 +70,9 @@ module DunkinDonuts
 
     def answer_questions(&progress_cb)
       while session.has_css?('#NextButton')
-        progress_percentage = session.find('#ProgressPercentage').text
-        update_progress_status("Answering questions - #{progress_percentage} done")
+        progress_percentage = session.find('#ProgressPercentage').text.chop
+        random_message = progress_percentage.to_i > 20
+        update_progress_status("Answering questions - #{progress_percentage}% done", random_message)
 
         session.within('#surveyForm') do
           answer_quiz_question ||
