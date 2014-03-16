@@ -65,7 +65,7 @@ module DunkinDonuts
       end
 
       if session.has_content?('For verification purposes, please re-enter')
-        update_progress_status("Dunkin' Donuts didn't like that survey code. Exiting...")
+        update_progress_status("Dunkin' Donuts didn't like that survey code.")
         false
       else
         true
