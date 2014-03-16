@@ -45,7 +45,7 @@ function onSubmit() {
   if (true || validateSurveyCode(surveyCode)) {
     disableInput();
 
-    getValidationCode('57601-39117-0903-1449', function () {
+    getValidationCode('5761-391-093-1449', function () {
       enableInput();
     });
   } else {
@@ -81,7 +81,7 @@ function getValidationCode(surveyCode, onDone) {
     var status = e.data;
     showStatus(status);
 
-    if (/Done!/.test(status)) {
+    if (/Done!|Exiting/.test(status)) {
       eventSource.close();
       eventSource = null;
       onDone();

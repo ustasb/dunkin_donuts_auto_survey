@@ -25,11 +25,12 @@ module DunkinDonuts
 
     def get_validation_code
       visit_welcome_page
-      enter_survey_code
-      answer_questions
-      code = extract_validation_code
-      update_progress_status("Done! Your validation code is: #{code}")
-      code
+      if enter_survey_code
+        answer_questions
+        code = extract_validation_code
+        update_progress_status("Done! Your validation code is: #{code}")
+        code
+      end
     end
 
     private
@@ -61,6 +62,13 @@ module DunkinDonuts
         session.fill_in 'CN3', with: @survey_code[2]
         session.fill_in 'CN4', with: @survey_code[3]
         session.click_button 'Start'
+      end
+
+      if session.has_content?('For verification purposes, please re-enter')
+        update_progress_status("Dunkin' Donuts didn't like that survey code. Exiting...")
+        false
+      else
+        true
       end
     end
 
