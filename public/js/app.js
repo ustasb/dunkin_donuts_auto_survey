@@ -42,10 +42,10 @@ function hideStatus(timeout) {
 function onSubmit() {
   var surveyCode = getSurveyCode();
 
-  if (true || validateSurveyCode(surveyCode)) {
+  if (validateSurveyCode(surveyCode)) {
     disableInput();
 
-    getValidationCode('5761-391-093-1449', function () {
+    getValidationCode(surveyCode, function () {
       enableInput();
     });
   } else {
