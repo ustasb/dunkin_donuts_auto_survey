@@ -7,20 +7,20 @@ end
 module DunkinDonuts
   TELL_DUNKIN_URL = 'https://www.telldunkin.com'
 
-  FUNNY_MESSAGES = [
-    "Ugh, I hate filling out surveys...",
-    "Help me...",
-    "I miss being outside...",
-    "whatever, whatever, whatever... this blows",
-    "This is depressing...",
-  ]
-
   class AutoSurvey
+    FUNNY_MSG_MIN_PROGRESS_PERCENT = 20
+    FUNNY_MSG_CHANCE = 1.to_f / 4
+    FUNNY_MSGS = [
+      "Ugh, I hate filling out surveys...",
+      "Help me...",
+      "I miss being outside...",
+      "This blows...",
+      "This is depressing...",
+    ]
 
     def initialize(survey_code, &progress_cb)
       @survey_code = survey_code.split('-')
       @progress_cb = progress_cb || -> (status) {}
-      @funny_messages = FUNNY_MESSAGES.dup.shuffle
     end
 
     def get_validation_code
@@ -35,20 +35,23 @@ module DunkinDonuts
 
     private
 
-    def update_progress_status(status, random_message = false)
-      if random_message && @funny_messages.any? && (rand() * 3).round == 3
-        status = @funny_messages.shift
-      end
-      @progress_cb.call(status)
-    end
-
     def session
       @session ||= Capybara::Session.new(:poltergeist)
     end
 
+    def get_funny_message
+      @funny_messages ||= FUNNY_MSGS.dup.shuffle
+      rand() <= FUNNY_MSG_CHANCE && @funny_messages.shift
+    end
+
+    def update_progress_status(status, funny_message = false)
+      @progress_cb.call(
+        funny_message ? get_funny_message || status : status
+      )
+    end
+
     def visit_welcome_page
       update_progress_status('Visiting the welcome page...')
-
       session.visit TELL_DUNKIN_URL
       session.click_link 'click here'
     end
@@ -79,8 +82,10 @@ module DunkinDonuts
     def answer_questions(&progress_cb)
       while session.has_css?('#NextButton')
         progress_percentage = session.find('#ProgressPercentage').text.chop
-        random_message = progress_percentage.to_i > 20
-        update_progress_status("Answering questions - #{progress_percentage}% done", random_message)
+        update_progress_status(
+          "Answering questions - #{progress_percentage}% done",
+          progress_percentage.to_i > FUNNY_MSG_MIN_PROGRESS_PERCENT
+        )
 
         session.within('#surveyForm') do
           answer_quiz_question ||
