@@ -9,7 +9,7 @@ get '/' do
   send_file 'public/index.html'
 end
 
-get '/validationcode/:survey_code', provides: 'text/event-stream' do
+get '/validation_code/:survey_code', provides: 'text/event-stream' do
   stream :keep_open do |out|
     DunkinDonuts::AutoSurvey.new(params[:survey_code]) do |status|
       out << "data: #{status}\n\n"

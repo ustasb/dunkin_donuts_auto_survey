@@ -34,9 +34,6 @@ b {
 
 #submit-status {
   display: none;
-  margin-top: 15px;
-}
-
-#submit-status {
   font-style: italic;
+  margin-top: 15px;
 }

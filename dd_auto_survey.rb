@@ -13,9 +13,9 @@ module DunkinDonuts
     REQUEST_SUCCESS = true
     REQUEST_FAILED = false
 
-    FUNNY_MSG_MIN_PROGRESS_PERCENT = 20
-    FUNNY_MSG_CHANCE = 1.to_f / 4
-    FUNNY_MSGS = [
+    FUNNY_MESSAGE_MIN_PROGRESS_PERCENT = 20
+    FUNNY_MESSAGE_CHANCE = 1.to_f / 5
+    FUNNY_MESSAGES = [
       "Ugh, I hate filling out surveys...",
       "Help me...",
       "I miss being outside...",
@@ -47,8 +47,8 @@ module DunkinDonuts
     end
 
     def get_funny_message
-      @funny_messages ||= FUNNY_MSGS.dup.shuffle
-      rand() <= FUNNY_MSG_CHANCE && @funny_messages.shift
+      @funny_messages ||= FUNNY_MESSAGES.dup.shuffle
+      rand() <= FUNNY_MESSAGE_CHANCE && @funny_messages.shift
     end
 
     def update_progress_status(status, funny_message = false)
@@ -91,7 +91,7 @@ module DunkinDonuts
         progress_percentage = session.find('#ProgressPercentage').text.chop
         update_progress_status(
           "Answering questions - #{progress_percentage}% done",
-          progress_percentage.to_i > FUNNY_MSG_MIN_PROGRESS_PERCENT
+          progress_percentage.to_i > FUNNY_MESSAGE_MIN_PROGRESS_PERCENT
         )
 
         session.within('#surveyForm') do
@@ -103,6 +103,17 @@ module DunkinDonuts
         end
 
         session.click_button 'Next'
+      end
+    end
+
+    def answer_quiz_question
+      if session.has_content?("For data quality purposes, please select")
+        table = session.find('table')
+        quiz_number = table.find('.LeftColumn').text[-2]
+        table.find(".Opt#{quiz_number} span").click
+        REQUEST_SUCCESS
+      else
+        REQUEST_FAILED
       end
     end
 
@@ -121,17 +132,6 @@ module DunkinDonuts
 
     def answer_checklist
       random_click session.all('.inputtypeopt .cataOption span')
-    end
-
-    def answer_quiz_question
-      if session.has_content?("For data quality purposes, please select")
-        table = session.find('table')
-        quiz_number = table.find('.LeftColumn').text[-2]
-        table.find(".Opt#{quiz_number} span").click
-        REQUEST_SUCCESS
-      else
-        REQUEST_FAILED
-      end
     end
 
     def answer_tabled_questions
@@ -156,6 +156,5 @@ module DunkinDonuts
         REQUEST_FAILED
       end
     end
-
   end
 end

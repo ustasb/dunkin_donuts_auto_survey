@@ -2,7 +2,7 @@
 
 var $window = $(window),
     $contentWrapper = $('#content-wrapper'),
-    $button = $('button'),
+    $submitButton = $('button'),
     $inputs = $('input'),
     $status = $('#submit-status'),
     eventSource = null;
@@ -18,12 +18,12 @@ function getSurveyCode() {
 }
 
 function disableInput() {
-  $button.prop('disabled', true);
+  $submitButton.prop('disabled', true);
   $inputs.prop('disabled', true);
 }
 
 function enableInput() {
-  $button.prop('disabled', false);
+  $submitButton.prop('disabled', false);
   $inputs.prop('disabled', false);
 }
 
@@ -32,11 +32,9 @@ function showStatus(status) {
 }
 
 function hideStatus(timeout) {
-  var timeout = timeout || 0;
-
   setTimeout(function () {
     $status.hide();
-  }, timeout);
+  }, timeout || 0);
 }
 
 function onSubmit() {
@@ -49,7 +47,7 @@ function onSubmit() {
       enableInput();
     });
   } else {
-    showStatus('Invalid Survey Code!');
+    showStatus('Invalid survey code!');
     hideStatus(3500);
   }
 }
@@ -75,13 +73,13 @@ function centerContent() {
 
 function getValidationCode(surveyCode, onDone) {
   eventSource && eventSource.close();
-  eventSource = new EventSource('/validationcode/' + surveyCode);
+  eventSource = new EventSource('/validation_code/' + surveyCode);
 
   eventSource.onmessage = function (e) {
     var status = e.data;
     showStatus(status);
 
-    if (/Done!|Exiting/.test(status)) {
+    if (/Done!/.test(status)) {
       eventSource.close();
       eventSource = null;
       onDone();
@@ -98,7 +96,7 @@ function getValidationCode(surveyCode, onDone) {
 
 function init() {
   centerContent();
-  $button.click(onSubmit);
+  $submitButton.click(onSubmit);
   $inputs.keyup(inputKeyUp);
   $window.resize(centerContent);
 }
