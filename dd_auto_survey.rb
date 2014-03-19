@@ -34,6 +34,8 @@ module DunkinDonuts
         update_progress_status("Done! Your validation code is: #{code}")
         code
       end
+    rescue Capybara::ElementNotFound
+      update_progress_status("Oh no! The survey has changed! Tell Brian to fix me.")
     end
 
     private
