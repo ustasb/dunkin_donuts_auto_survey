@@ -1,3 +1,5 @@
+# coding: utf-8
+
 require 'capybara/poltergeist'
 
 Capybara.register_driver :poltergeist do |app|
