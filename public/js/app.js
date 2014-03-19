@@ -77,12 +77,13 @@ function getValidationCode(surveyCode, onDone) {
 
   eventSource.onmessage = function (e) {
     var status = e.data;
-    showStatus(status);
 
-    if (/Done!/.test(status)) {
+    if (/___DONE___/.test(status)) {
       eventSource.close();
       eventSource = null;
       onDone();
+    } else {
+      showStatus(status);
     }
   };
 

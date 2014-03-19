@@ -38,6 +38,8 @@ module DunkinDonuts
       end
     rescue Capybara::ElementNotFound
       update_progress_status("Oh no! The survey has changed! Tell Brian to fix me.")
+    ensure
+      update_progress_status("___DONE___")
     end
 
     private
