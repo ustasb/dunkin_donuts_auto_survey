@@ -8,6 +8,9 @@ module DunkinDonuts
   TELL_DUNKIN_URL = 'https://www.telldunkin.com'
 
   class AutoSurvey
+    REQUEST_SUCCESS = true
+    REQUEST_FAILED = false
+
     FUNNY_MSG_MIN_PROGRESS_PERCENT = 20
     FUNNY_MSG_CHANCE = 1.to_f / 4
     FUNNY_MSGS = [
@@ -69,9 +72,9 @@ module DunkinDonuts
 
       if session.has_content?('For verification purposes, please re-enter')
         update_progress_status("Dunkin' Donuts didn't like that survey code.")
-        false
+        REQUEST_FAILED
       else
-        true
+        REQUEST_SUCCESS
       end
     end
 
@@ -79,7 +82,7 @@ module DunkinDonuts
       session.find('#finishContent .ValCode').text[-5, 5]
     end
 
-    def answer_questions(&progress_cb)
+    def answer_questions
       while session.has_css?('#NextButton')
         progress_percentage = session.find('#ProgressPercentage').text.chop
         update_progress_status(
@@ -99,29 +102,32 @@ module DunkinDonuts
       end
     end
 
+    def random_click(elements)
+      if elements.any?
+        elements.sample.click
+        REQUEST_SUCCESS
+      else
+        REQUEST_FAILED
+      end
+    end
+
+    def answer_vertical_radio
+      random_click session.all('.inputtyperblv .rbloption span')
+    end
+
+    def answer_checklist
+      random_click session.all('.inputtypeopt .cataOption span')
+    end
+
     def answer_quiz_question
       if session.has_content?("For data quality purposes, please select")
         table = session.find('table')
         quiz_number = table.find('.LeftColumn').text[-2]
         table.find(".Opt#{quiz_number} span").click
-        true
+        REQUEST_SUCCESS
       else
-        false
+        REQUEST_FAILED
       end
-    end
-
-    def answer_vertical_radio
-      options = session.all('.inputtyperblv .rbloption span')
-      sample = options.sample
-      sample.click if sample
-      !!sample
-    end
-
-    def answer_checklist
-      options = session.all('.inputtypeopt .cataOption span')
-      sample = options.sample
-      sample.click if sample
-      !!sample
     end
 
     def answer_tabled_questions
@@ -129,11 +135,11 @@ module DunkinDonuts
       if table.any?
         questions = table.first.all('.InputRowOdd, .InputRowEven')
         questions.each do |question|
-          question.all('.inputtyperbloption span').sample.click
+          random_click question.all('.inputtyperbloption span')
         end
-        true
+        REQUEST_SUCCESS
       else
-        false
+        REQUEST_FAILED
       end
     end
 
@@ -141,9 +147,9 @@ module DunkinDonuts
       selects = session.all('.inputtypeddl select')
       if selects.any?
         selects.each { |select| select.select 'Prefer not to answer' }
-        true
+        REQUEST_SUCCESS
       else
-        false
+        REQUEST_FAILED
       end
     end
 
