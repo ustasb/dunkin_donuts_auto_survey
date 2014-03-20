@@ -79,7 +79,7 @@ function bumpSurveysCompletedCount() {
 
 function getValidationCode(surveyCode, onDone) {
   eventSource && eventSource.close();
-  eventSource = new EventSource('/validation_code/' + surveyCode);
+  eventSource = new EventSource('freedonut/validation_code/' + surveyCode);
 
   eventSource.onmessage = function (e) {
     var status = e.data;
@@ -110,7 +110,7 @@ function init() {
   $inputs.keyup(inputKeyUp);
   $window.resize(centerContent);
 
-  $.get('/surveys_completed', function (count) {
+  $.get('/freedonut/surveys_completed', function (count) {
     $surveysCompleted.text(count);
   });
 }
