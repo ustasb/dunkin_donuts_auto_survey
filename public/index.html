@@ -14,33 +14,34 @@
   <div id="content-wrapper">
     <h1>Dunkin' Donuts Auto-Survey</h1>
 
-    <span>
+    <div>
       Automatically completes a Dunkin' Donuts
       <a href="https://www.telldunkin.com/">survey</a>
       to earn you
       <br>
       <b>a free donut!</b>
-    </span>
+    </div>
 
-    <br><br>
+    <div id="surveys-completed">
+      Surveys Completed:
+      <span></span>
+    </div>
 
     <form class="pure-form" action="javascript:void(0);">
-      <fieldset>
-        <label for="survey-code-1">
-          <a href="images/receipt-half.png">Survey Code</a>
-        </label>
+      <label for="survey-code-1">
+        <a href="images/receipt-half.png">Survey Code</a>
+      </label>
 
-        <br>
+      <br>
 
-        <input id="survey-code-1" maxlength="5" tabIndex="1"> -
-        <input id="survey-code-2" maxlength="5" tabIndex="2"> -
-        <input id="survey-code-3" maxlength="4" tabIndex="3"> -
-        <input id="survey-code-4" maxlength="4" tabIndex="4">
+      <input id="survey-code-1" maxlength="5" tabIndex="1"> -
+      <input id="survey-code-2" maxlength="5" tabIndex="2"> -
+      <input id="survey-code-3" maxlength="4" tabIndex="3"> -
+      <input id="survey-code-4" maxlength="4" tabIndex="4">
 
-        <br>
+      <br>
 
-        <button type="submit" class="pure-button pure-button-primary" tabIndex="5">Get Validation Code</button>
-      </fieldset>
+      <button type="submit" class="pure-button pure-button-primary" tabIndex="5">Get Validation Code</button>
     </form>
 
     <div id="submit-status"></div>

@@ -5,6 +5,7 @@ var $window = $(window),
     $submitButton = $('button'),
     $inputs = $('input'),
     $status = $('#submit-status'),
+    $surveysCompleted = $('#surveys-completed span'),
     eventSource = null;
 
 function validateSurveyCode(surveyCode) {
@@ -71,6 +72,11 @@ function centerContent() {
   $contentWrapper.css('margin-top', marginTop);
 }
 
+function bumpSurveysCompletedCount() {
+  var count = $surveysCompleted.text().slice(-1);
+  $surveysCompleted.text( (parseInt(count, 10) || 0) + 1 );
+}
+
 function getValidationCode(surveyCode, onDone) {
   eventSource && eventSource.close();
   eventSource = new EventSource('/validation_code/' + surveyCode);
@@ -83,6 +89,9 @@ function getValidationCode(surveyCode, onDone) {
       eventSource = null;
       onDone();
     } else {
+      if (/Your validation code is/.test(status)) {
+        bumpSurveysCompletedCount();
+      }
       showStatus(status);
     }
   };
@@ -100,6 +109,10 @@ function init() {
   $submitButton.click(onSubmit);
   $inputs.keyup(inputKeyUp);
   $window.resize(centerContent);
+
+  $.get('/surveys_completed', function (count) {
+    $surveysCompleted.text(count);
+  });
 }
 
 init();
