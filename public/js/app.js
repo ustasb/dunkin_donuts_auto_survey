@@ -73,7 +73,7 @@ function centerContent() {
 }
 
 function bumpSurveysCompletedCount() {
-  var count = $surveysCompleted.text().slice(-1);
+  var count = $surveysCompleted.text().match(/\d*$/)[0];
   $surveysCompleted.text( (parseInt(count, 10) || 0) + 1 );
 }
 
