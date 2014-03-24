@@ -14,8 +14,12 @@ Install the Ruby gems:
 
     bundle install
 
-Launch the Sinatra server:
+Setup the Thin configuration file:
 
-    bundle exec ruby server.rb
+    sudo thin config -C /etc/thin/dunkin_donuts_auto_survey.yml -c /path/to/dunkin_donuts_auto_survey --address 127.0.0.1 --port 5000 --servers 2 -e production --log /path/to/log/dunkin_donuts_auto_survey/thin.log
+
+Launch the Thin server:
+
+    thin start -C /path/to/dunkin_donuts_auto_survey.yml
 
 [1]: https://www.telldunkin.com/
