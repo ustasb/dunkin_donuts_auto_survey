@@ -8,6 +8,12 @@ set server: 'thin'
 set :bind, '0.0.0.0'
 set :port, 9000
 
+if ENV['SINATRA_ENV'] == 'production'
+  set :environment, :production
+else
+  set :environment, :development
+end
+
 save_file = SaveFile.new('dd_save_file')
 surveys_completed_key = 'surveys_completed'
 
