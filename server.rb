@@ -6,6 +6,7 @@ require_relative 'dd_auto_survey'
 
 set server: 'thin'
 set :bind, '0.0.0.0'
+set :port, 9000
 
 save_file = SaveFile.new('dd_save_file')
 surveys_completed_key = 'surveys_completed'
