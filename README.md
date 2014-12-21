@@ -24,4 +24,8 @@ Install the Ruby gems:
 
 Start the [Thin](http://code.macournoyer.com/thin) server:
 
-    bundle exec thin start --address 127.0.0.1 --port 5000 -e production
+    ruby server.rb
+
+    or for production:
+
+    SINATRA_ENV=production ruby server.rb
