@@ -36,10 +36,12 @@ module DunkinDonuts
         update_progress_status("Done! Your validation code is: #{code}")
         code
       end
-    rescue Capybara::ElementNotFound
+    rescue Capybara::ElementNotFound => e
       update_progress_status("Oh no! The survey has changed! Tell Brian to fix me.")
-    rescue
+      puts e
+    rescue => e
       update_progress_status("Oh no! Something unusual happened! Try again.")
+      puts e
     ensure
       session.driver.quit
       update_progress_status("___DONE___")
