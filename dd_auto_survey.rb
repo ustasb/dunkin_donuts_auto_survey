@@ -39,7 +39,7 @@ module DunkinDonuts
     rescue Capybara::ElementNotFound
       update_progress_status("Oh no! The survey has changed! Tell Brian to fix me.")
     rescue
-      update_progress_status("Oh no! Something unusual happened! Tell Brian to fix me.")
+      update_progress_status("Oh no! Something unusual happened! Try again.")
     ensure
       session.driver.quit
       update_progress_status("___DONE___")
