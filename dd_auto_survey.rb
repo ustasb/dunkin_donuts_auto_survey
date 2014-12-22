@@ -41,6 +41,7 @@ module DunkinDonuts
     rescue
       update_progress_status("Oh no! Something unusual happened! Tell Brian to fix me.")
     ensure
+      session.driver.quit
       update_progress_status("___DONE___")
     end
 
