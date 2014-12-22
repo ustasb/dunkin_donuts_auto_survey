@@ -12,6 +12,13 @@ function validateSurveyCode(surveyCode) {
   return /^\w{5}-\w{5}-\w{4}-\w{4}$/.test(surveyCode);
 }
 
+function populateInputsWithTestSurveyCode() {
+  var testSurveyCode = ['57601', '39117', '0903', '1449'];
+  $inputs.each(function (i) {
+    $(this).val(testSurveyCode[i]);
+  });
+}
+
 function getSurveyCode() {
   return $inputs.map(function () {
     return $(this).val();
@@ -116,5 +123,6 @@ function init() {
 }
 
 init();
+window.populateInputsWithTestSurveyCode = populateInputsWithTestSurveyCode;
 
 }());
