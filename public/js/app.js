@@ -110,7 +110,7 @@ function init() {
   $inputs.keyup(inputKeyUp);
   $window.resize(centerContent);
 
-  $.get('/surveys_completed', function (count) {
+  $.get('surveys_completed', function (count) {
     $surveysCompleted.text(count);
   });
 }
