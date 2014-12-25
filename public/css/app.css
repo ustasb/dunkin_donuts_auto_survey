@@ -42,3 +42,11 @@ b {
   font-style: italic;
   margin-top: 20px;
 }
+
+#facebook-like-button {
+  position: absolute;
+  top: 15px;
+  right: 0;
+  width: 90px;
+  overflow: hidden;
+}
