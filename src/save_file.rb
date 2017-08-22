@@ -2,7 +2,7 @@ require 'json'
 
 class SaveFile
   def initialize(file_name)
-    @file_name = "../#{file_name}.json"
+    @file_name = "#{file_name}.json"
   end
 
   def get(key)

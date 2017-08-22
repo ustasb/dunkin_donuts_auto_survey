@@ -1,8 +1,7 @@
 FROM ruby:2.4.1-alpine3.6
 MAINTAINER Brian Ustas <brianustas@gmail.com>
 
-ARG APP_PATH="/srv/www/dunkin_donuts_auto_survey"
-ENV SINATRA_ENV="production"
+ARG APP_PATH="/opt/dunkin_donuts_auto_survey"
 
 RUN apk add --update build-base
 
@@ -15,11 +14,14 @@ RUN apk update && apk add --no-cache fontconfig curl && \
   && ln -s /usr/share/phantomjs/phantomjs /usr/bin/phantomjs \
   && phantomjs --version
 
-COPY . $APP_PATH
 WORKDIR $APP_PATH
 
+# Add Gemfile and Gemfile.lock first for caching.
+ADD Gemfile $APP_PATH
+ADD Gemfile.lock $APP_PATH
 RUN bundle install
 
+COPY . $APP_PATH
 VOLUME $APP_PATH
 EXPOSE 9000
 
