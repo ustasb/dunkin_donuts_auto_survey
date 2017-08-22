@@ -7,6 +7,7 @@ require_relative 'dd_auto_survey'
 set server: 'thin'
 set :bind, '0.0.0.0'
 set :port, 9000
+set :public_folder, 'public'
 
 if ENV['SINATRA_ENV'] == 'production'
   set :environment, :production

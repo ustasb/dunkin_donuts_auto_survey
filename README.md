@@ -8,24 +8,12 @@ This project automatically completes that survey and provides the validation cod
 
 You'll need an actual receipt to obtain the survey code.
 
-## Setup
+## Usage
 
-Install [Phantom JS](http://phantomjs.org/):
+Build the Docker image:
 
-    brew install phantomjs # os x
+    docker build -t dunkin_donuts_auto_survey .
 
-    or
+Run the Sinatra server:
 
-    apt-get install phantomjs # ubuntu
-
-Install the Ruby gems:
-
-    bundle install
-
-Start the [Thin](http://code.macournoyer.com/thin) server:
-
-    ruby server.rb
-
-    or for production:
-
-    SINATRA_ENV=production ruby server.rb
+    docker run -p 9000:9000 dunkin_donuts_auto_survey
