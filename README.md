@@ -1,6 +1,6 @@
 # Dunkin' Donuts Auto-Survey
 
-[ustasb.com/free-donut](http://ustasb.com/free-donut)
+[brianustas.com/free-donut](http://brianustas.com/free-donut)
 
 Completing a Dunkin' Donuts survey at [telldunkin.com](https://www.telldunkin.com/) will earn you a free donut.
 
