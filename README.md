@@ -1,6 +1,6 @@
 # Dunkin' Donuts Auto-Survey
 
-- [brianustas.com/free-donut](http://brianustas.com/free-donut/)
+- [brianustas.com/free-donut/](http://brianustas.com/free-donut/)
 - Initial release: 03/24/2014
 - Author: [Brian Ustas](http://brianustas.com)
 
