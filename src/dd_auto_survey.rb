@@ -14,12 +14,11 @@ module DunkinDonuts
     REQUEST_FAILED = false
 
     FUNNY_MESSAGE_MIN_PROGRESS_PERCENT = 20
-    FUNNY_MESSAGE_CHANCE = 1.to_f / 5
+    FUNNY_MESSAGE_CHANCE = 1.to_f / 7
     FUNNY_MESSAGES = [
       "Ugh, I hate filling out surveys...",
       "Help me...",
       "I miss being outside...",
-      "This blows...",
       "This is depressing...",
     ]
 
